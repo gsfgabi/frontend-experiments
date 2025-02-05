@@ -1,0 +1,171 @@
+/* Importar fonte Google - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  display: flex;
+  padding: 0 10px;
+  min-height: 100vh;
+  align-items: center;
+  background: #26C6DA;
+  justify-content: center;
+}
+
+.wrapper {
+  height: 265px;
+  max-width: 410px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px 25px 0;
+  transition: height 0.2s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper.active {
+  height: 580px;
+}
+
+header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+header p {
+  margin-top: 5px;
+  color: #575757;
+  font-size: 16px;
+}
+
+.wrapper .form {
+  margin: 20px 0 25px;
+}
+
+.form :where(input, button) {
+  width: 100%;
+  height: 55px;
+  border: none;
+  outline: none;
+  border-radius: 7px;
+  transition: all 0.3s ease;
+}
+
+.form input {
+  font-size: 18px;
+  padding: 0 17px;
+  border: 1px solid #ccc;
+}
+
+.form input:focus {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-color: #26C6DA;
+}
+
+.form input::placeholder {
+  color: #aaa;
+}
+
+.form button {
+  color: #fff;
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 17px;
+  background: #26C6DA;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.form button:hover {
+  background: #1ba9c2;
+  transform: scale(1.03);
+}
+
+.qr-code {
+  opacity: 0;
+  display: flex;
+  padding: 33px 0;
+  border-radius: 5px;
+  align-items: center;
+  pointer-events: none;
+  justify-content: center;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.wrapper.active .qr-code {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.5s 0.05s ease;
+}
+
+.qr-code img {
+  width: 200px;
+}
+
+#download-btn {
+  display: none;
+  width: 100%;
+  height: 50px;
+  border: 2px solid #26C6DA; 
+  border-radius: 7px;
+  background-color: #fff; 
+  font-size: 16px;
+  color: #26C6DA; 
+  cursor: pointer;
+  text-align: center;
+  line-height: 50px;
+  transition: all 0.3s ease;
+  margin-top: 20px; 
+}
+
+#download-btn:hover {
+  background-color: #26C6DA; 
+  color: #fff;  
+  border-color: #1ba9c2;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#download-btn:active {
+  transform: scale(0.98);
+}
+
+#download-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(38, 198, 218, 0.5);
+}
+
+@media (max-width: 430px) {
+  .wrapper {
+    height: 255px;
+    padding: 16px 20px;
+  }
+
+  .wrapper.active {
+    height: 550px;
+  }
+
+  header h1 {
+    font-size: 20px;
+  }
+
+  header p {
+    color: #696969;
+    font-size: 14px;
+  }
+
+  .form :where(input, button),
+  #download-btn {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  .qr-code img {
+    width: 160px;
+  }
+}
