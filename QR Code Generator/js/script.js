@@ -1,35 +1,95 @@
-const wrapper = document.querySelector(".wrapper"),
-  qrInput = wrapper.querySelector(".form input"),
-  generateBtn = wrapper.querySelector(".form button"),
-  qrImg = wrapper.querySelector(".qr-code img"),
-  downloadBtn = document.getElementById("download-btn");
+const qrInput = document.getElementById("qr-input"),
+  generateBtn = document.getElementById("generate-btn"),
+  qrContainer = document.getElementById("qr-code"), // Div para exibir o QR Code
+  downloadBtn = document.getElementById("download-btn"),
+  qrUpload = document.getElementById("qr-upload"),
+  uploadBtn = document.getElementById("upload-btn"),
+  qrContentDiv = document.getElementById("qr-content");
 
-let preValue;
+let qrCodeInstance = null;
 
+// Gerar QR Code
 generateBtn.addEventListener("click", () => {
-  let qrValue = qrInput.value.trim();
-  if (!qrValue || preValue === qrValue) return;
-  preValue = qrValue;
-  generateBtn.innerText = "Gerando código QR...";
+  const qrValue = qrInput.value.trim();
+  if (!qrValue) {
+    console.warn("Nenhum valor inserido para gerar o QR Code.");
+    return;
+  }
 
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrValue)}`;
-  qrImg.src = qrCodeUrl;
+  console.log("Botão de gerar QR Code foi clicado.");
+  console.log("Valor inserido no input:", qrValue);
 
-  qrImg.addEventListener("load", () => {
-    qrImg.style.display = "block";  
-    wrapper.classList.add("active");
-    generateBtn.innerText = "Gerar QR Code";
-    downloadBtn.style.display = "block";
-    downloadBtn.href = qrCodeUrl;
-    downloadBtn.download = "QRCode.png";
+  // Limpar QR Code anterior
+  qrContainer.innerHTML = "";
+  qrCodeInstance = new QRCode(qrContainer, {
+    text: qrValue,
+    width: 200,
+    height: 200,
   });
+
+  console.log("QR Code gerado com sucesso!");
+
+  setTimeout(() => {
+    const qrImage = qrContainer.querySelector("img");
+    if (qrImage) {
+      console.log("QR Code convertido para imagem:", qrImage.src);
+      downloadBtn.href = qrImage.src;
+      downloadBtn.download = "QRCode.png";
+      downloadBtn.style.display = "block";
+    } else {
+      console.warn("Erro ao capturar a imagem do QR Code.");
+    }
+  }, 500);
 });
 
-qrInput.addEventListener("keyup", () => {
-  if (!qrInput.value.trim()) {
-    wrapper.classList.remove("active");
-    preValue = "";
-    qrImg.style.display = "none";  
-    downloadBtn.style.display = "none";
+uploadBtn.addEventListener("click", () => {
+  qrContentDiv.style.display = "none";
+  qrContentDiv.innerText = "";
+
+  const file = qrUpload.files[0];
+  if (!file) {
+    console.warn("Nenhum arquivo selecionado.");
+    return;
   }
+
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const img = new Image();
+    img.src = event.target.result;
+    img.onload = function () {
+      console.log("Imagem carregada para leitura do QR Code.");
+
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      console.log("Imagem desenhada no canvas para extração do QR Code.");
+
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      const code = jsQR(imageData.data, canvas.width, canvas.height);
+
+      if (code) {
+        console.log("QR Code detectado com sucesso:", code.data);
+        qrContentDiv.innerText = `Conteúdo do QR Code: ${code.data}`;
+        qrContentDiv.style.display = "block";
+      } else {
+        console.warn("Nenhum QR Code foi detectado na imagem.");
+        qrContentDiv.innerText = "QR Code não pôde ser lido.";
+        qrContentDiv.style.display = "block";
+      }
+    };
+
+    img.onerror = function () {
+      console.error("Erro ao carregar a imagem.");
+    };
+  };
+
+  reader.onerror = function () {
+    console.error("Erro ao ler o arquivo.");
+  };
+
+  reader.readAsDataURL(file);
 });
