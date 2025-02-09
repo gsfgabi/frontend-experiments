@@ -2,15 +2,31 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
-    background-color: #f5f5f5;
+    background: linear-gradient(135deg, #c79852, #a07c47, #e4c79d);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 20px;
+    min-height: 100vh;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 header {
@@ -20,7 +36,9 @@ header {
 
 header h1 {
     font-size: 32px;
-    color: #333;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
 }
 
 .container {
@@ -29,18 +47,25 @@ header h1 {
     gap: 20px;
     max-width: 1000px;
     width: 100%;
+    padding: 0 10px;
 }
 
 .card {
-    background: white;
-    padding: 15px;
+    background: #fff;
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .card h2 {
-    font-size: 18px;
+    font-size: 20px;
     margin-bottom: 10px;
     color: #555;
 }
@@ -50,11 +75,37 @@ header h1 {
     text-decoration: none;
     background-color: #007BFF;
     color: white;
-    padding: 8px 12px;
+    padding: 10px 16px;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+    max-height: 200px;  /* Limita a altura máxima do GIF */
+    object-fit: contain;
+    border-radius: 8px;
+    margin-top: 15px;
 }
 
 .card a:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 28px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    .card a {
+        padding: 8px 14px;
+    }
 }
